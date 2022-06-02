@@ -70,6 +70,55 @@ vector<string> Shell_sorting(vector<string> words, ofstream& file_result) // с�
     return words;
 }
 
+void Conclusion(vector<string> words, chrono::duration<double> duraction, string text, ifstream& file_1, ofstream& file_analysis) // вывод деталей в analysis.txt и в консоль
+{
+    file_analysis << "Введенный текст:" << endl;
+    cout << "Введенный текст:" << endl;
+    while (getline(file_1, text)) {
+        file_analysis << text << endl;
+        cout << text << endl;
+    }
+
+    file_analysis << "Вариант 4: латиница, по кол-ву символов в слове, по убыванию, игнорировать числа, сортировка Шелла" << endl;
+    cout << "Вариант 4: латиница, по кол-ву символов в слове, по убыванию, игнорировать числа, сортировка Шелла" << endl;
+    file_analysis << "Количество слов: " << words.size() << endl;
+    cout << "Количество слов: " << words.size() << endl;
+    file_analysis << "Время сортировки: " << duraction.count() << " сек" << endl;
+    cout << "Время сортировки: " << duraction.count() << " сек" << endl;
+}
+
+void Counting(vector<string> words, ofstream& file_analysis) // подсчёт слов одной длины в тексте и вывод в analysis.txt
+{
+    int j = 1;
+    bool chek = true;
+
+    file_analysis << "Статистика (сколько слов одной длины в тексте): " << endl;
+    cout << "Статистика (сколько слов одной длины в тексте): " << endl;
+    for (int i = 0; i < words.size(); i++) {
+        if (i != words.size() - 1) {
+            while (words[i].length() == words[i + 1].length()) {
+                j++;
+                i++;
+                if (i == words.size() - 1) {
+                    file_analysis << words[i].length() << " - " << j << endl;
+                    cout << words[i].length() << " - " << j << endl;
+                    chek = false;
+                    break;
+                }
+            }
+            if (chek) {
+                file_analysis << words[i].length() << " - " << j << endl;
+                cout << words[i].length() << " - " << j << endl;
+                j = 1;
+            }
+        }
+        else {
+            file_analysis << words[i].length() << " - " << j << endl;
+            cout << words[i].length() << " - " << j << endl;
+        }
+    }
+}
+
 int main()
 {
     setlocale(LC_ALL, "rus");
@@ -82,6 +131,7 @@ int main()
     File_check(file, file_1, file_analysis, file_result);
 
     vector<string> words;
+    string text;
     string word;
 
     auto start = chrono::high_resolution_clock::now();
@@ -91,9 +141,11 @@ int main()
     chrono::duration<double> duraction = end - start; // время сортировки
     cout << duraction.count() << " сек" << endl;
 
+    Conclusion(words, duraction, text, file_1, file_analysis);
+    Counting(words, file_analysis);
+
     file.close();
     file_1.close();
     file_analysis.close();
     file_result.close();
-
 }
