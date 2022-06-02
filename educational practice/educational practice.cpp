@@ -3,6 +3,7 @@
 #include <vector> // добавляет контейнер vector (динамический массив с индексами и своими функциями)
 #include <string> // упрощение работы со строками
 #include <cmath> // добавляет дополнительнные математические функции
+#include <chrono> // добавляет функции для измерения времени работы алгоритма
 using namespace std;
 
 int File_check(ifstream& file, ifstream& file_1, ofstream& file_analysis, ofstream& file_result) // проверка открытия файлов
@@ -82,11 +83,13 @@ int main()
 
     vector<string> words;
     string word;
+
+    auto start = chrono::high_resolution_clock::now();
     words = Removal_of_excess(words, word, file);
     words = Shell_sorting(words, file_result);
-    for (int i = 0; i < words.size(); i++) {
-        cout << words[i] << endl;
-    }
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> duraction = end - start; // время сортировки
+    cout << duraction.count() << " сек" << endl;
 
     file.close();
     file_1.close();
