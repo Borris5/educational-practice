@@ -46,6 +46,29 @@ vector<string> Removal_of_excess(vector<string> words, string word, ifstream& fi
     return words;
 }
 
+vector<string> Shell_sorting(vector<string> words, ofstream& file_result) // сортировка Шелла массива слов по убыванию, вывод результата в result.txt
+{
+    int distance = words.size();
+    string buf;
+    while (distance > 0) {
+        for (int i = 0; i < words.size() - distance / 2; i++) {
+            if (words[i].length() < words[i + distance / 2].length()) {
+                buf = words[i];
+                words[i] = words[i + distance / 2];
+                words[i + distance / 2] = buf;
+            }
+        }
+        distance--;
+    }
+    while (words.back() == "\0") words.pop_back(); // удаление пустых строк
+
+    for (int i = 0; i < words.size(); i++) { // вывод результата в result.txt
+        file_result << words[i] << endl;
+    }
+
+    return words;
+}
+
 int main()
 {
     setlocale(LC_ALL, "rus");
@@ -60,7 +83,7 @@ int main()
     vector<string> words;
     string word;
     words = Removal_of_excess(words, word, file);
-
+    words = Shell_sorting(words, file_result);
     for (int i = 0; i < words.size(); i++) {
         cout << words[i] << endl;
     }
